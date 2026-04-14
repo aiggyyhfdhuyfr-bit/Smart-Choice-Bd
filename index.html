@@ -16,46 +16,52 @@
             width: 210mm;
             height: 297mm;
             background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             margin: 20px auto;
             position: relative;
             overflow: hidden;
             border: 1px solid #ddd;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
         @media print {
-            body * { visibility: hidden; }
-            .a4, .a4 * { visibility: visible; }
+            body * {
+                visibility: hidden;
+            }
+            .a4, .a4 * {
+                visibility: visible;
+            }
             .a4 {
                 position: absolute;
-                left: 0; top: 0;
+                left: 0;
+                top: 0;
                 width: 210mm;
                 height: 297mm;
-                margin: 0;
                 box-shadow: none;
-                border: none;
+                margin: 0;
+                page-break-inside: avoid;
             }
-            .no-print { display: none !important; }
+            .no-print {
+                display: none !important;
+            }
         }
 
-        /* Passport Layout - unchanged */
         .passport-grid {
             display: grid;
             grid-template-columns: repeat(4, 35mm);
             grid-template-rows: repeat(5, 45mm);
-            gap: 4mm;
-            padding: 10mm 12mm;
+            gap: 5mm;
+            padding: 12mm 15mm;
             width: 100%;
             height: 100%;
             box-sizing: border-box;
         }
 
         .photo-slot {
-            border: 1.5px solid #222;
+            border: 2px solid #333;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #f8f8f8;
+            background: #f9f9f9;
             overflow: hidden;
         }
 
@@ -65,72 +71,84 @@
             object-fit: cover;
         }
 
-        /* Improved 16:9 Layout - No empty space */
         .sixteen-grid {
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8mm;
+            padding: 15mm 20mm;
             width: 100%;
             height: 100%;
-            gap: 0;                    /* ফাঁকা জায়গা পুরোপুরি ০ */
-            padding: 0;                /* কোনো padding নেই */
             box-sizing: border-box;
         }
 
         .sixteen-slot {
-            flex: 1;                   /* প্রত্যেকটা ছবি সমান জায়গা নিবে */
-            width: 100%;
-            border: 1px solid #111;    /* খুব পাতলা border */
+            width: 165mm;
+            aspect-ratio: 16 / 9;
+            border: 3px solid #333;
             background: #f9f9f9;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .sixteen-slot img {
             width: 100%;
             height: 100%;
-            object-fit: cover;         /* পুরো জায়গা ভর্তি করবে, crop করবে যদি দরকার হয় */
+            object-fit: cover;
         }
     </style>
 </head>
 <body class="bg-gray-100">
 
-    <!-- Header (same as before) -->
+    <!-- Header -->
     <div class="bg-indigo-700 text-white py-4 shadow-md no-print">
         <div class="max-w-5xl mx-auto px-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="bg-white text-indigo-700 w-9 h-9 rounded-xl flex items-center justify-center text-2xl font-bold">📸</div>
                 <div>
                     <h1 class="text-2xl font-semibold">A4 ফটো প্রিন্টার</h1>
-                    <p class="text-sm opacity-90">পাসপোর্ট সাইজ + ১৬:৯ • ফাঁকা জায়গা ছাড়া</p>
+                    <p class="text-sm opacity-90">পাসপোর্ট সাইজ + ১৬:৯ লেআউট • শুধু আপনার জন্য</p>
                 </div>
+            </div>
+            <div class="text-right">
+                <p class="text-xs opacity-75">IT Tool for Bangladesh</p>
+                <p class="text-sm font-medium">Nafiz • Khulna</p>
             </div>
         </div>
     </div>
 
     <div class="max-w-5xl mx-auto px-4 py-8">
 
-        <!-- Upload Section (same) -->
+        <!-- Upload Section -->
         <div class="bg-white rounded-3xl shadow-xl p-8 mb-8 no-print">
             <div class="flex flex-col md:flex-row items-center gap-6">
                 <div class="flex-1">
                     <h2 class="text-2xl font-semibold mb-2 text-gray-800">ছবি আপলোড করুন</h2>
-                    <p class="text-gray-600 mb-4">JPG, PNG • একাধিক ছবি • ব্রাউজারে থাকবে</p>
+                    <p class="text-gray-600 mb-4">বাংলাদেশি পাসপোর্ট সাইজ অথবা ১৬:৯ সাইজের ছবি একসাথে আপলোড করুন। সব ছবি আপনার ব্রাউজারে থাকবে — কোনো সার্ভারে যাবে না।</p>
                     
-                    <label id="upload-label" class="cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-indigo-300 hover:border-indigo-500 rounded-2xl py-12 transition-colors bg-gray-50">
+                    <label id="upload-label" 
+                           class="cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-indigo-300 hover:border-indigo-500 rounded-2xl py-12 transition-colors bg-gray-50">
                         <div class="text-6xl mb-4">📤</div>
-                        <p class="font-medium text-indigo-700 text-lg">ছবি সিলেক্ট করুন বা ড্র্যাগ করুন</p>
+                        <p class="font-medium text-indigo-700 text-lg">ছবি সিলেক্ট করুন অথবা ড্র্যাগ করে ফেলুন</p>
+                        <p class="text-sm text-gray-500 mt-1">JPG, PNG, WEBP • একাধিক ছবি</p>
                         <input type="file" id="file-input" multiple accept="image/*" class="hidden">
                     </label>
                 </div>
 
                 <div class="flex-1 text-center">
-                    <div id="upload-status" class="text-sm text-gray-500">এখনো কোনো ছবি আপলোড হয়নি</div>
+                    <div id="upload-status" class="text-sm text-gray-500">
+                        এখনো কোনো ছবি আপলোড হয়নি
+                    </div>
                     <div id="image-count" class="text-5xl font-bold text-indigo-600 mt-2">0</div>
-                    <p class="text-xs text-gray-400 mt-1">ছবি আপলোড হয়েছে</p>
-                    <button onclick="clearAllImages()" class="mt-6 px-6 py-2 text-red-600 hover:bg-red-50 rounded-2xl flex items-center gap-2 mx-auto">
-                        🗑️ সব মুছে ফেলুন
+                    <p class="text-xs text-gray-400">ছবি আপলোড হয়েছে</p>
+
+                    <button onclick="clearAllImages()" 
+                            class="mt-6 px-6 py-2 text-red-600 hover:bg-red-50 rounded-2xl flex items-center gap-2 mx-auto">
+                        <span class="text-xl">🗑️</span>
+                        সব ছবি মুছে ফেলুন
                     </button>
                 </div>
             </div>
@@ -138,25 +156,32 @@
 
         <!-- Tabs -->
         <div class="flex border-b border-gray-200 mb-6 no-print">
-            <button onclick="switchTab(0)" id="tab-0" class="tab-button flex-1 py-4 text-center font-medium text-lg border-b-4 border-indigo-600 text-indigo-700">📸 পাসপোর্ট সাইজ</button>
-            <button onclick="switchTab(1)" id="tab-1" class="tab-button flex-1 py-4 text-center font-medium text-lg border-b-4 border-transparent hover:text-indigo-700">📺 ১৬:৯ (৩টা ছবি)</button>
+            <button onclick="switchTab(0)" id="tab-0"
+                    class="tab-button flex-1 py-4 text-center font-medium text-lg rounded-t-3xl border-b-4 border-indigo-600 text-indigo-700">
+                📸 পাসপোর্ট সাইজ লেআউট
+            </button>
+            <button onclick="switchTab(1)" id="tab-1"
+                    class="tab-button flex-1 py-4 text-center font-medium text-lg rounded-t-3xl border-b-4 border-transparent hover:text-indigo-700">
+                📺 ১৬:৯ লেআউট (৩টা ছবি)
+            </button>
         </div>
 
         <!-- Passport Layout -->
         <div id="layout-0">
             <div class="text-center mb-4">
-                <h3 class="text-xl font-semibold">A4 এ ২০টা পাসপোর্ট সাইজ ছবি</h3>
+                <h3 class="text-xl font-semibold">A4 পেজে ২০টা পাসপোর্ট সাইজ ছবি (৩৫×৪৫ মি.মি.)</h3>
+                <p class="text-sm text-gray-500">প্রথম ২০টা ছবি ব্যবহার হবে। প্রিন্ট করলে পুরো A4 পেজ ভর্তি হয়ে যাবে।</p>
             </div>
             <div class="a4">
                 <div id="passport-grid" class="passport-grid"></div>
             </div>
         </div>
 
-        <!-- 16:9 Layout - Improved -->
+        <!-- 16:9 Layout -->
         <div id="layout-1" class="hidden">
             <div class="text-center mb-4">
-                <h3 class="text-xl font-semibold">A4 পুরো পেজ জুড়ে ৩টা ১৬:৯ ছবি (ফাঁকা জায়গা ছাড়া)</h3>
-                <p class="text-sm text-gray-500">ছবিগুলো পুরোপুরি ভর্তি থাকবে • প্রিন্টে Background graphics অন করুন</p>
+                <h3 class="text-xl font-semibold">A4 পেজে ৩টা ১৬:৯ ছবি পুরো পেজ জুড়ে</h3>
+                <p class="text-sm text-gray-500">প্রথম ৩টা ছবি ব্যবহার হয়। ছবিগুলো পুরো A4 পেজ ভর্তি করে সাজানো হবে।</p>
             </div>
             <div class="a4">
                 <div id="sixteen-grid" class="sixteen-grid"></div>
@@ -164,106 +189,182 @@
         </div>
 
         <!-- Print Button -->
-        <div class="flex justify-center mt-10 no-print">
-            <button onclick="window.print()" 
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white text-2xl font-semibold px-16 py-6 rounded-3xl shadow-2xl flex items-center gap-3 active:scale-95">
+        <div class="flex justify-center mt-8 no-print">
+            <button onclick="printPage()" 
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white text-2xl font-semibold px-14 py-6 rounded-3xl shadow-2xl flex items-center gap-4 transition-transform active:scale-95">
                 🖨️ প্রিন্ট করুন
+                <span class="text-sm bg-white/20 px-4 py-1 rounded-2xl">Ctrl + P চাপলেও চলবে</span>
             </button>
         </div>
 
         <p class="text-center text-xs text-gray-400 mt-6 no-print">
-            প্রিন্ট সেটিংসে Scale = 100% এবং Background graphics চেক করুন
+            প্রিন্ট করার সময় ব্রাউজারে “More settings” → Scale = 100% রাখুন এবং Background graphics চেক করুন
         </p>
     </div>
 
+    <footer class="text-center py-6 text-gray-400 text-xs no-print">
+        Made for Nafiz • Khulna • 100% Free &amp; Offline • GitHub Pages এ হোস্ট করা হয়েছে
+    </footer>
+
     <script>
-        let uploadedImages = [];
+        // Tailwind script
+        function initializeTailwind() {
+            tailwind.config = {
+                content: [],
+                theme: {
+                    extend: {}
+                }
+            }
+        }
 
+        let uploadedImages = [] // array of object URLs
+
+        // Render Passport Layout (4x5 = 20 slots)
         function renderPassport() {
-            const grid = document.getElementById('passport-grid');
-            grid.innerHTML = '';
+            const grid = document.getElementById('passport-grid')
+            grid.innerHTML = ''
+
             for (let i = 0; i < 20; i++) {
-                const slot = document.createElement('div');
-                slot.className = 'photo-slot';
+                const slot = document.createElement('div')
+                slot.className = 'photo-slot'
+
                 if (uploadedImages[i]) {
-                    const img = document.createElement('img');
-                    img.src = uploadedImages[i];
-                    slot.appendChild(img);
+                    const img = document.createElement('img')
+                    img.src = uploadedImages[i]
+                    slot.appendChild(img)
                 } else {
-                    slot.innerHTML = '<span class="text-gray-300 text-5xl">📷</span>';
+                    const placeholder = document.createElement('div')
+                    placeholder.className = 'text-gray-300 text-4xl flex items-center justify-center w-full h-full'
+                    placeholder.innerHTML = '📷'
+                    slot.appendChild(placeholder)
                 }
-                grid.appendChild(slot);
+                grid.appendChild(slot)
             }
         }
 
+        // Render 16:9 Layout (exactly 3 slots)
         function renderSixteen() {
-            const grid = document.getElementById('sixteen-grid');
-            grid.innerHTML = '';
+            const grid = document.getElementById('sixteen-grid')
+            grid.innerHTML = ''
+
             for (let i = 0; i < 3; i++) {
-                const slot = document.createElement('div');
-                slot.className = 'sixteen-slot';
+                const slot = document.createElement('div')
+                slot.className = 'sixteen-slot'
+
                 if (uploadedImages[i]) {
-                    const img = document.createElement('img');
-                    img.src = uploadedImages[i];
-                    slot.appendChild(img);
+                    const img = document.createElement('img')
+                    img.src = uploadedImages[i]
+                    slot.appendChild(img)
                 } else {
-                    slot.innerHTML = '<span class="text-gray-300 text-7xl">📺</span>';
+                    const placeholder = document.createElement('div')
+                    placeholder.className = 'text-gray-300 text-6xl flex items-center justify-center w-full h-full'
+                    placeholder.innerHTML = '📺'
+                    slot.appendChild(placeholder)
                 }
-                grid.appendChild(slot);
+                grid.appendChild(slot)
             }
         }
 
+        // Upload handler
         function handleFiles(files) {
+            const status = document.getElementById('upload-status')
+            const countEl = document.getElementById('image-count')
+
             Array.from(files).forEach(file => {
                 if (file.type.startsWith('image/')) {
-                    uploadedImages.push(URL.createObjectURL(file));
+                    const url = URL.createObjectURL(file)
+                    uploadedImages.push(url)
                 }
-            });
-            document.getElementById('upload-status').textContent = '✅ ছবি আপলোড হয়েছে';
-            document.getElementById('image-count').textContent = uploadedImages.length;
-            renderPassport();
-            renderSixteen();
+            })
+
+            status.textContent = '✅ ছবি আপলোড হয়েছে'
+            countEl.textContent = uploadedImages.length
+
+            // Render both layouts
+            renderPassport()
+            renderSixteen()
         }
 
+        // Clear all
         function clearAllImages() {
-            uploadedImages.forEach(url => URL.revokeObjectURL(url));
-            uploadedImages = [];
-            document.getElementById('upload-status').textContent = 'সব ছবি মুছে ফেলা হয়েছে';
-            document.getElementById('image-count').textContent = '0';
-            renderPassport();
-            renderSixteen();
+            // Revoke object URLs to free memory
+            uploadedImages.forEach(url => URL.revokeObjectURL(url))
+            uploadedImages = []
+            document.getElementById('upload-status').textContent = 'সব ছবি মুছে ফেলা হয়েছে'
+            document.getElementById('image-count').textContent = '0'
+            renderPassport()
+            renderSixteen()
         }
 
+        // Tab switching
+        let currentTab = 0
         function switchTab(tab) {
-            document.getElementById('layout-0').classList.toggle('hidden', tab !== 0);
-            document.getElementById('layout-1').classList.toggle('hidden', tab !== 1);
+            currentTab = tab
             
-            document.querySelectorAll('.tab-button').forEach((btn, i) => {
-                btn.classList.toggle('border-indigo-600', i === tab);
-                btn.classList.toggle('text-indigo-700', i === tab);
-            });
+            document.getElementById('layout-0').classList.add('hidden')
+            document.getElementById('layout-1').classList.add('hidden')
+            
+            document.getElementById('layout-' + tab).classList.remove('hidden')
+
+            // Update active tab style
+            document.querySelectorAll('.tab-button').forEach((btn, index) => {
+                if (index === tab) {
+                    btn.classList.add('border-indigo-600', 'text-indigo-700')
+                    btn.classList.remove('border-transparent')
+                } else {
+                    btn.classList.remove('border-indigo-600', 'text-indigo-700')
+                    btn.classList.add('border-transparent')
+                }
+            })
         }
 
-        // Init
-        window.onload = () => {
-            const fileInput = document.getElementById('file-input');
-            const uploadLabel = document.getElementById('upload-label');
+        // Print function
+        function printPage() {
+            window.print()
+        }
 
-            uploadLabel.addEventListener('click', () => fileInput.click());
-            fileInput.addEventListener('change', e => e.target.files.length && handleFiles(e.target.files));
+        // Main initialization
+        function init() {
+            initializeTailwind()
 
-            // Drag & Drop
-            uploadLabel.addEventListener('dragover', e => { e.preventDefault(); uploadLabel.classList.add('bg-indigo-100'); });
-            uploadLabel.addEventListener('dragleave', () => uploadLabel.classList.remove('bg-indigo-100'));
-            uploadLabel.addEventListener('drop', e => {
-                e.preventDefault();
-                uploadLabel.classList.remove('bg-indigo-100');
-                handleFiles(e.dataTransfer.files);
-            });
+            const fileInput = document.getElementById('file-input')
+            const uploadLabel = document.getElementById('upload-label')
 
-            renderPassport();
-            renderSixteen();
-        };
+            // Click to upload
+            uploadLabel.addEventListener('click', () => fileInput.click())
+
+            // File selected
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFiles(e.target.files)
+                }
+            })
+
+            // Drag & Drop support
+            uploadLabel.addEventListener('dragover', (e) => {
+                e.preventDefault()
+                uploadLabel.classList.add('bg-indigo-100')
+            })
+            uploadLabel.addEventListener('dragleave', () => {
+                uploadLabel.classList.remove('bg-indigo-100')
+            })
+            uploadLabel.addEventListener('drop', (e) => {
+                e.preventDefault()
+                uploadLabel.classList.remove('bg-indigo-100')
+                if (e.dataTransfer.files.length > 0) {
+                    handleFiles(e.dataTransfer.files)
+                }
+            })
+
+            // Initial render (empty slots)
+            renderPassport()
+            renderSixteen()
+
+            console.log('%c✅ Nafiz এর A4 ফটো প্রিন্টার রেডি!', 'color: #4f46e5; font-size: 16px; font-weight: bold')
+        }
+
+        // Start the app
+        window.onload = init
     </script>
 </body>
 </html>
